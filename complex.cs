@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+
 
 namespace mandelbrot
 {
@@ -80,4 +82,47 @@ namespace mandelbrot
 			Console.WriteLine((re != 0 ? re.ToString() : "") + (im > 0 && re != 0 ? "+" : "") + (im != 0 ? im.ToString() + "i" : ""));
 		}
 	}
+
+	public class ComplexTest
+	{
+		public void Run()
+		{
+			{
+				Complex complex1 = new Complex(1.0, 1.0);
+				Complex complex2 = new Complex(1.0, -1.0);
+				complex1.Add(complex2);
+
+				Debug.Assert(complex1.Real() == 2.0);
+				Debug.Assert(complex1.Imaginary() == 0);
+			}
+
+			
+			{
+				Complex complex1 = new Complex(2.0, 3.0);
+				Complex complex2 = new Complex(4.0, 5.0);
+				complex1.Multiply(complex2);
+
+				Debug.Assert(complex1.Real() == -7.0);
+				Debug.Assert(complex1.Imaginary() == 22);
+			}
+
+			{
+				Complex complex1 = new Complex(4.0, 2.0);
+				Complex complex2 = new Complex(3.0, -1.0);
+				complex1.Divide(complex2);
+
+				Debug.Assert(complex1.Real() == 1.0);
+				Debug.Assert(complex1.Imaginary() == 1);
+			}
+			
+			/*{
+				complex1.Subtract(complex2);
+				complex1.Multiply(complex2);
+				complex1.Print();
+
+				Console.Write("Real = " + complex1.Real());
+				Console.Write("\n Imaginary = " + complex1.Imaginary());
+			}*/
+		}
+	};
 }

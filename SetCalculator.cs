@@ -2,11 +2,13 @@
 
 namespace mandelbrot
 {
-    class Program
+    class SetCalculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("TEST");
+
+            new ComplexTest().Run();
         }
     }
 }
