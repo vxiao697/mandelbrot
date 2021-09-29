@@ -14,7 +14,7 @@ namespace mandelbrot
     {   
         static void Main(string[] args)
         {
-            SetCalculator sc = new SetCalculator(10, 10);
+            SetCalculator sc = new SetCalculator(50, 50);
 
             sc.FillGrid(1.25, -2.0, 2.5, 2.5);
 
@@ -68,7 +68,68 @@ namespace mandelbrot
             this.height = height;
 
             IntializeGrid();
+
+
+            int pos = 0;
+            for (int i = 0; i < yPixels; i++)
+            {
+                for (int j = 0; j < xPixels; j++)
+                {
+                    iterate(pos);
+                    pos++;
+                }
+            }
+
+            print();
         }
 
+        private void iterate(int pos)
+        {
+            int count = 0;
+            Complex c = new Complex(grid[pos].complex);
+            Complex z = new Complex(0, 0);
+
+            do
+            {
+                z.Multiply(z);
+                z.Add(c);
+
+                count++;
+            } while (IsDivergent(z) == false && count < 255);
+
+            grid[pos].count = count;
+        }
+
+        private bool IsDivergent(Complex c)
+        {
+            if (c.MagnitudeSquared() < THRESHOLD)
+                return false;
+            else
+                return true;
+        }
+
+        private void print()
+        {
+            int pos = 0;
+
+            for (int i = 0; i < yPixels; i++)
+            {
+                for (int j = 0; j < xPixels; j++)
+                {
+
+                    if (grid[pos].count > 0 && grid[pos].count < 64)
+                    {
+                        Console.Write("  ");
+                    }
+                    else
+                    {
+                        Console.Write("  ");
+                    }
+                    pos++;
+                }
+
+                Console.WriteLine();
+            }
+        }
     }
 }
