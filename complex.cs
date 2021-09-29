@@ -24,10 +24,10 @@ namespace mandelbrot
             im = complex.Imaginary();
         }
 
-		public Complex(double real, double image)
+		public Complex(double real, double imag)
 		{
 			re = real;
-			im = image;
+			im = imag;
 		}
 
 		public double Real() { return re; }
