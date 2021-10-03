@@ -70,7 +70,7 @@ namespace mandelbrot
             b = grid[pos].blue;
         }
 
-        void IntializeGrid()
+        void IntializeGrid()//requires a top left point and the width/height of the screen to calculate a "default" complex number for each position in the grid
         {
             int pos = 0;
             double xGap = width / xPixels;
@@ -143,6 +143,7 @@ namespace mandelbrot
 
         private void iterate(int pos)
         {
+            //outdated - not multithreaded
             int count = 0;
             Complex c = new Complex(grid[pos].complex);
             Complex z = new Complex(0, 0);
@@ -156,10 +157,12 @@ namespace mandelbrot
             } while (IsDivergent(z) == false && count < 255);
 
             grid[pos].count = count;
+
         }
 
         private void iterate(int startRow, int endRow)
         {
+            //checks for number of iterations before divergence/convergence
             for (int i = startRow; i < endRow; i++)
             {
                 for (int j = 0; j < xPixels; j++)

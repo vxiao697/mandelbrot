@@ -93,7 +93,7 @@ namespace mandelbrot
 
 		private void grayscale_Checked(object sender, RoutedEventArgs e)
 		{
-			grayscale.Content = "i rember 😁";
+			//grayscale.Content = "i rember 😁";
 			if (color != null) { color.IsChecked = false; }
 			if (color != null) { histo.IsChecked = false; }
 
@@ -101,7 +101,7 @@ namespace mandelbrot
 		}
 		private void grayscale_Unchecked(object sender, RoutedEventArgs e)
 		{
-			grayscale.Content = "i forgor 💀";
+			//grayscale.Content = "i forgor 💀";
 			colorMode = ' ';
 		}
 

@@ -1,4 +1,6 @@
 .vs/**
-bin/**
+bin/Debug/**
+bin/Release/mandelbrot.exe.config
+bin/Release/mandelbrot.pdb
 obj/**
 mandelbrot.sln
