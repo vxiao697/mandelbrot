@@ -1,4 +1,4 @@
-#mandelbrot
+# mandelbrot
 A C# WPF app which graphs the famous mandelbrot set, along with controls that allows zoom and coloring options
 
 ## An image of the set
