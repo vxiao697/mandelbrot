@@ -8,8 +8,12 @@ namespace mandelbrot
     {
         public Complex complex;
         public int count;
+        public byte red;
+        public byte green;
+        public byte blue;
     }
 
+    /*
     class Run
     {   
         static void Main(string[] args)
@@ -21,6 +25,8 @@ namespace mandelbrot
             Debug.Assert(true);
         }
     }
+    */
+
     public class SetCalculator
     {
         const double THRESHOLD = 4.0;
@@ -39,6 +45,13 @@ namespace mandelbrot
             xPixels = xPix;
             yPixels = yPix;
             grid = new SetPixel[xPixels * yPixels];
+        }
+
+        public void GetColor(int pos, out byte r, out byte g, out byte b)
+        {
+            r = grid[pos].red;
+            g = grid[pos].green;
+            b = grid[pos].blue;
         }
 
         void IntializeGrid()
@@ -80,7 +93,15 @@ namespace mandelbrot
                 }
             }
 
-            print();
+            pos = 0;
+            for (int i = 0; i < yPixels; i++)
+            {
+                for (int j = 0; j < xPixels; j++)
+                {
+                    ApplyGrayScale(grid[pos].count, pos);
+                    pos++;
+                }
+            }
         }
 
         private void iterate(int pos)
@@ -123,13 +144,20 @@ namespace mandelbrot
                     }
                     else
                     {
-                        Console.Write("  ");
+                        Console.Write("**");
                     }
                     pos++;
                 }
 
                 Console.WriteLine();
             }
+        }
+
+        private void ApplyGrayScale(int count, int pos)
+        {
+            grid[pos].red = (byte)(256 - count);
+            grid[pos].green = (byte)(256 - count);
+            grid[pos].blue = (byte)(256 - count);
         }
     }
 }

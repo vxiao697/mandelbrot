@@ -1,0 +1,51 @@
+﻿<Window x:Class="mandelbrot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mandelbrot"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1030" Width="1325">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1000"/>
+            <ColumnDefinition Width="300*"/>
+        </Grid.ColumnDefinitions>
+
+        <Image x:Name="mbimage" HorizontalAlignment="Left" VerticalAlignment="Top" Height="1000" Width="1000" MouseLeftButtonUp="mbimage_MouseLeftButtonUp" MouseRightButtonUp="mbimage_MouseRightButtonUp" Margin="0,0,0,-31" Grid.Column="0" />
+
+        <StackPanel Grid.Column="1">
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <Label HorizontalContentAlignment="Right" Height="20" Width="50" VerticalContentAlignment="Center" Padding="0" Margin="0,0,10,0">Top :</Label>
+                <TextBox x:Name="topEdit" VerticalContentAlignment="Center" Height="20" Text="1.25"  Width="200"/>
+            </StackPanel>
+
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <Label HorizontalContentAlignment="Right" Height="20" Width="50" VerticalContentAlignment="Center" Padding="0" Margin="0,0,10,0">Left :</Label>
+
+                <TextBox x:Name="leftEdit" VerticalContentAlignment="Center" Height="20" Text="-2.0"  Width="200"/>
+            </StackPanel>
+
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <Label HorizontalContentAlignment="Right" Height="20" Width="50" VerticalContentAlignment="Center" Padding="0" Margin="0,0,10,0">Width :</Label>
+
+                <TextBox x:Name="widthEdit" VerticalContentAlignment="Center" Height="20" Text="2.5"  Width="200"/>
+            </StackPanel>
+
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <Label HorizontalContentAlignment="Right" Height="20" Width="50" VerticalContentAlignment="Center" Padding="0" Margin="0,0,10,0">Height :</Label>
+
+                <TextBox x:Name="heightEdit" VerticalContentAlignment="Center" Height="20" Text="2.5"  Width="200"/>
+            </StackPanel>
+
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <Label HorizontalContentAlignment="Right" Height="20" Width="50" VerticalContentAlignment="Center" Padding="0" Margin="0,0,10,0">Zoom</Label>
+
+                <TextBox x:Name="zoomEdit" VerticalContentAlignment="Center" Height="20" Text="4"  Width="100"/>
+            </StackPanel>
+
+            <Button Cursor="Hand" x:Name="calculate" Content="Calculate" HorizontalAlignment="Left" Margin="100,20,0,0" VerticalAlignment="Top" Width="100" Height="40" Click="calculateClicked"/>
+
+        </StackPanel>
+    </Grid>
+</Window>
