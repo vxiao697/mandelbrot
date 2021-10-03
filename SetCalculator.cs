@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 
 namespace mandelbrot
@@ -11,6 +12,12 @@ namespace mandelbrot
         public byte red;
         public byte green;
         public byte blue;
+    }
+
+    internal struct MBTaskParam
+    {
+        public int start;
+        public int end;
     }
 
     /*
@@ -30,6 +37,13 @@ namespace mandelbrot
     public class SetCalculator
     {
         const double THRESHOLD = 4.0;
+        int processCount;
+
+        MBTaskParam[] mbTaskParams = null;
+        Task[] tasks = null;
+        private SetPixel[] grid = null;
+        int[] histogram = new int[16];
+        int[] colors = new int[256 * 256 * 256];
 
         double left;
         double top;
@@ -38,13 +52,15 @@ namespace mandelbrot
         int xPixels;
         int yPixels;
 
-        private SetPixel[] grid = null;
-
         public SetCalculator(int xPix, int yPix)
         {
             xPixels = xPix;
             yPixels = yPix;
             grid = new SetPixel[xPixels * yPixels];
+
+            processCount = Environment.ProcessorCount;
+            mbTaskParams = new MBTaskParam[processCount];
+            tasks = new Task[processCount];
         }
 
         public void GetColor(int pos, out byte r, out byte g, out byte b)
@@ -84,14 +100,24 @@ namespace mandelbrot
 
 
             int pos = 0;
-            for (int i = 0; i < yPixels; i++)
+            int startRow = 0;
+            int step = yPixels / processCount;
+            int endRow = startRow + step;
+            for (int i = 0; i < processCount; i++)
             {
-                for (int j = 0; j < xPixels; j++)
-                {
-                    iterate(pos);
-                    pos++;
-                }
+                MBTaskParam mbTP = new MBTaskParam();
+                mbTP.start = startRow;
+                mbTP.end = endRow;
+                mbTaskParams[i] = mbTP;
+                tasks[i] = new Task(() => iterate(mbTP.start, mbTP.end));
+                tasks[i].Start();
+
+                startRow = endRow;
+                endRow += step;
+                if (endRow > yPixels)
+                    endRow = yPixels;
             }
+            Task.WaitAll(tasks);
 
             pos = 0;
             for (int i = 0; i < yPixels; i++)
@@ -130,6 +156,35 @@ namespace mandelbrot
             } while (IsDivergent(z) == false && count < 255);
 
             grid[pos].count = count;
+        }
+
+        private void iterate(int startRow, int endRow)
+        {
+            for (int i = startRow; i < endRow; i++)
+            {
+                for (int j = 0; j < xPixels; j++)
+                {
+                    int pos = i * xPixels + j;
+
+                    int count = 0;
+                    Complex c = new Complex(grid[pos].complex.Real(), grid[pos].complex.Imaginary());
+                    Complex z = new Complex(0, 0);
+
+                    do
+                    {
+                        z.Multiply(z);
+                        z.Add(c);
+
+                        count++;
+                    } while (IsDivergent(z) == false && count < 255);
+
+                    grid[pos].count = count;
+
+                    count = count / 16;
+
+                    histogram[count] += 1;
+                }
+            }
         }
 
         private bool IsDivergent(Complex c)

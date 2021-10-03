@@ -34,6 +34,8 @@ namespace mandelbrot
 			pixelData = new byte[rawStride * imageHeight];
 
 			cal = new SetCalculator(imageWidth, imageHeight);
+
+			FillGraph();
 		}
 
 		void SetPixel(int x, int y, Color c, byte[] buffer, int rawStride)
@@ -56,65 +58,7 @@ namespace mandelbrot
 			Button btn = (Button)sender;
 			btn.IsEnabled = false;
 
-			try
-			{
-				top = Convert.ToDouble(topEdit.Text);
-			}
-			catch (FormatException)
-			{
-				top = 1.25;
-			}
-
-			try
-			{
-				left = Convert.ToDouble(leftEdit.Text);
-			}
-			catch (FormatException)
-			{
-				left = -2.0;
-
-			}
-
-			try
-			{
-				width = Convert.ToDouble(widthEdit.Text);
-			}
-			catch (FormatException)
-			{
-				width = 2.5;
-			}
-
-			try
-			{
-				height = Convert.ToDouble(heightEdit.Text);
-			}
-			catch (FormatException)
-			{
-				height = 2.5;
-			}
-
-			cal.FillGrid(top, left, width, height, colorMode);
-			int pos = 0;
-			for (int y = 0; y < imageHeight; y++)
-			{
-				for (int x = 0; x < imageWidth; x++)
-				{
-					Color c = new Color();
-
-					byte r, g, b;
-					cal.GetColor(pos, out r, out g, out b);
-					c.R = r;
-					c.G = g;
-					c.B = b;
-
-					SetPixel(x, y, c, pixelData, rawStride);
-
-					pos++;
-				}
-			}
-
-			bitmap = BitmapSource.Create(imageWidth, imageHeight, 96, 96, pf, null, pixelData, rawStride);
-			mbimage.Source = bitmap;
+			FillGraph();
 
 			this.Cursor = Cursors.Arrow;
 			btn.IsEnabled = true;
@@ -218,5 +162,74 @@ namespace mandelbrot
 
 		byte[] pixelData;
 		SetCalculator cal = null;
+
+		private void FillGraph()
+        {
+			try
+			{
+				top = Convert.ToDouble(topEdit.Text);
+			}
+			catch (FormatException)
+			{
+				top = 1.25;
+			}
+
+			try
+			{
+				left = Convert.ToDouble(leftEdit.Text);
+			}
+			catch (FormatException)
+			{
+				left = -2.0;
+
+			}
+
+			try
+			{
+				width = Convert.ToDouble(widthEdit.Text);
+			}
+			catch (FormatException)
+			{
+				width = 2.5;
+			}
+
+			try
+			{
+				height = Convert.ToDouble(heightEdit.Text);
+			}
+			catch (FormatException)
+			{
+				height = 2.5;
+			}
+
+			Task mbCal = new Task(() => cal.FillGrid(top, left, width, height, colorMode));
+			mbCal.ContinueWith(t =>
+			{
+				int pos = 0;
+				for (int y = 0; y < imageHeight; y++)
+				{
+					for (int x = 0; x < imageWidth; x++)
+					{
+						Color c = new Color();
+
+						byte r, g, b;
+						cal.GetColor(pos, out r, out g, out b);
+						c.R = r;
+						c.G = g;
+						c.B = b;
+
+						SetPixel(x, y, c, pixelData, rawStride);
+
+						pos++;
+					}
+				}
+
+				bitmap = BitmapSource.Create(imageWidth, imageHeight, 96, 96, pf, null, pixelData, rawStride);
+				mbimage.Source = bitmap;
+
+			}, TaskScheduler.FromCurrentSynchronizationContext());
+
+			mbCal.Start();
+		}
 	}
 }
