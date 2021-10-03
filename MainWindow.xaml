@@ -45,7 +45,32 @@
             </StackPanel>
 
             <Button Cursor="Hand" x:Name="calculate" Content="Calculate" HorizontalAlignment="Left" Margin="100,20,0,0" VerticalAlignment="Top" Width="100" Height="40" Click="calculateClicked"/>
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <CheckBox Name="grayscale"   
+                    Canvas.Left="10" Canvas.Top="10"  
+                    Content="Grayscale"   
+                    IsChecked="True"
+                    Checked="grayscale_Checked" Unchecked="grayscale_Unchecked">
+                </CheckBox>
+            </StackPanel>
+            
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <CheckBox Name="color"   
+                    Canvas.Left="10" Canvas.Top="10"  
+                    Content="Color"   
+                    IsChecked="False"
+                    Checked="color_Checked" Unchecked="color_Unchecked">
+                </CheckBox>
+            </StackPanel>
 
+            <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                <CheckBox Name="histo"   
+                    Canvas.Left="10" Canvas.Top="10"  
+                    Content="Histogram"   
+                    IsChecked="False"
+                    Checked="histo_Checked" Unchecked="histo_Unchecked">
+                </CheckBox>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

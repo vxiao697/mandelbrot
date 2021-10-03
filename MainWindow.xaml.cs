@@ -93,7 +93,7 @@ namespace mandelbrot
 				height = 2.5;
 			}
 
-			cal.FillGrid(top, left, width, height);
+			cal.FillGrid(top, left, width, height, colorMode);
 			int pos = 0;
 			for (int y = 0; y < imageHeight; y++)
 			{
@@ -147,6 +147,44 @@ namespace mandelbrot
 			heightEdit.Text = Convert.ToString(newHeight);
 		}
 
+		private void grayscale_Checked(object sender, RoutedEventArgs e)
+		{
+			grayscale.Content = "i rember 😁";
+			if (color != null) { color.IsChecked = false; }
+			if (color != null) { histo.IsChecked = false; }
+
+			colorMode = 'g';
+		}
+		private void grayscale_Unchecked(object sender, RoutedEventArgs e)
+		{
+			grayscale.Content = "i forgor 💀";
+			colorMode = ' ';
+		}
+
+		private void color_Checked(object sender, RoutedEventArgs e)
+		{
+			grayscale.IsChecked = false;
+			histo.IsChecked = false;
+
+			colorMode = 'c';
+		}
+		private void color_Unchecked(object sender, RoutedEventArgs e)
+		{
+			colorMode = ' ';
+		}
+
+		private void histo_Checked(object sender, RoutedEventArgs e)
+		{
+			color.IsChecked = false;
+			grayscale.IsChecked = false;
+
+			colorMode = 'h';
+		}
+		private void histo_Unchecked(object sender, RoutedEventArgs e)
+		{
+			colorMode = ' ';
+		}
+
 		double top = 1.25;
 		double left = -2.0;
 		double width = 2.5;
@@ -156,6 +194,8 @@ namespace mandelbrot
 		double oldLeft;
 		double oldWidth;
 		double oldHeight;
+
+		char colorMode;
 
 		/*
 		double top = 0.375;

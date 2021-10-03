@@ -73,7 +73,7 @@ namespace mandelbrot
             }
         }
 
-        public void FillGrid(double top, double left, double width, double height)
+        public void FillGrid(double top, double left, double width, double height, char colorMode)
         {
             this.left = left;
             this.top = top;
@@ -98,7 +98,18 @@ namespace mandelbrot
             {
                 for (int j = 0; j < xPixels; j++)
                 {
-                    ApplyGrayScale(grid[pos].count, pos);
+                    if(colorMode == 'g')
+                    {
+                        ApplyGrayScale(grid[pos].count, pos);
+                    }
+                    else if(colorMode == 'c')
+                    {
+                        ApplyColor(grid[pos].count, pos);
+                    }
+                    else if (colorMode == 'h')
+                    {
+                        ApplyHistogram(grid[pos].count, pos);
+                    }
                     pos++;
                 }
             }
@@ -158,6 +169,110 @@ namespace mandelbrot
             grid[pos].red = (byte)(256 - count);
             grid[pos].green = (byte)(256 - count);
             grid[pos].blue = (byte)(256 - count);
+        }
+
+        private void ApplyColor(int count, int pos)
+        {
+            if (count == 255)
+            {
+                grid[pos].red = 0;
+                grid[pos].green = 0;
+                grid[pos].blue = 0;
+            }
+            else if (count > 0 && count <= 85)
+            {
+                grid[pos].red = (byte)((double)(count * 3));
+                grid[pos].green = (byte)(71 + (double)(count * 2.283));
+                grid[pos].blue = (byte)(171 + (double)(count));
+            }
+            else if (count > 85 && count <= 170)
+            {
+                count = 170 - (count - 85);
+                grid[pos].red = 255;
+                grid[pos].green = (byte)(1.5 * (double)(170 - (count - 85)));
+                grid[pos].blue = (byte)(3 * (double)(170 - count));
+            }
+            else
+            {
+                grid[pos].red = (byte)(1.5 * (double)(255 - count));
+                grid[pos].green = (byte)(1.5 * (double)(255 - count));
+                grid[pos].blue = 0;
+            }
+        }
+
+        private void ApplyHistogram(int count, int pos)
+        {
+            if (count == 255)
+            {
+                grid[pos].red = 0;
+                grid[pos].green = 0;
+                grid[pos].blue = 0;
+            }
+            else
+            {
+                count = count % 8;
+
+                switch (count)
+                {
+                    case 0:
+                        {
+                            grid[pos].red = 255;
+                            grid[pos].green = 0;
+                            grid[pos].blue = 0;
+                        }
+                        break;
+
+                    case 1:
+                        {
+                            grid[pos].red = 255;
+                            grid[pos].green = 127;
+                            grid[pos].blue = 0;
+                            break;
+                        }
+                    case 2:
+                        {
+                            grid[pos].red = 255;
+                            grid[pos].green = 255;
+                            grid[pos].blue = 0;
+                            break;
+                        }
+                    case 3:
+                        {
+                            grid[pos].red = 0;
+                            grid[pos].green = 255;
+                            grid[pos].blue = 0;
+                            break;
+                        }
+                    case 4:
+                        {
+                            grid[pos].red = 0;
+                            grid[pos].green = 0;
+                            grid[pos].blue = 255;
+                            break;
+                        }
+                    case 5:
+                        {
+                            grid[pos].red = 0;
+                            grid[pos].green = 0;
+                            grid[pos].blue = 255;
+                            break;
+                        }
+                    case 6:
+                        {
+                            grid[pos].red = 75;
+                            grid[pos].green = 0;
+                            grid[pos].blue = 130;
+                            break;
+                        }
+                    case 7:
+                        {
+                            grid[pos].red = 143;
+                            grid[pos].green = 0;
+                            grid[pos].blue = 255;
+                            break;
+                        }
+                }
+            }
         }
     }
 }
